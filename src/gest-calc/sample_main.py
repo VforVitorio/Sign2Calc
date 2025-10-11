@@ -1,5 +1,6 @@
 import cv2
 
+
 class Button:
     def __init__(self, pos, width, height, value):
         self.pos = pos
@@ -21,10 +22,11 @@ class Button:
 
 
 # MUST be configured for each system
-cap = cv2.VideoCapture(2) # here would be 0 or 1 for most systems, but mine is 2
+# here would be 0 or 1 for most systems, but mine is 2
+cap = cv2.VideoCapture(0)
 # it is the webcam address, in my case in /dev/video2
 
-#input image size, based on your webcam
+# input image size, based on your webcam
 WIDTH = 1920
 HEIGHT = 1080
 cap.set(3, WIDTH)
@@ -32,7 +34,8 @@ cap.set(4, HEIGHT)
 
 # basic list of buttons, may be changed (changes must be justified)
 buttonListValues = [['C', '<'],
-                    ['7', '8', '9', '/'],  # ÷ cant be rendered, so well have to do with / :/
+                    # ÷ cant be rendered, so well have to do with / :/
+                    ['7', '8', '9', '/'],
                     ['4', '5', '6', '*'],
                     ['1', '2', '3', '-'],
                     ['0', '.', '=', '+']]
@@ -40,21 +43,24 @@ buttonListValues = [['C', '<'],
 buttonlist = []
 for y in range(5):
     for x in range(4):
-        if y == 0 and x >= 2:  # first row only has 2 buttons (C and <), so kinda special case
+        # first row only has 2 buttons (C and <), so kinda special case
+        if y == 0 and x >= 2:
             break
 
         xpos = int(WIDTH - 500 + x * 100)
         ypos = int(HEIGHT * 0.15 + y * 100)
 
         # first row special case, second button needs to be shifted
-        if y == 0 and x == 1: #not the most elegant
+        if y == 0 and x == 1:  # not the most elegant
             xpos += 100
 
         if y == 0:
             width = 200
-            buttonlist.append(Button((xpos, ypos), width, 100, buttonListValues[y][x]))
+            buttonlist.append(Button((xpos, ypos), width,
+                              100, buttonListValues[y][x]))
         else:
-            buttonlist.append(Button((xpos, ypos), 100, 100, buttonListValues[y][x]))
+            buttonlist.append(
+                Button((xpos, ypos), 100, 100, buttonListValues[y][x]))
 
 operation = ""
 
@@ -98,4 +104,3 @@ while True:
     key = cv2.waitKey(1)
     if key == ord('q'):
         break
-
