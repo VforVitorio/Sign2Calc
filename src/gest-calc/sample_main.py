@@ -2,6 +2,10 @@ import cv2
 
 
 class Button:
+    """
+    Represents a calculator button with position, size, and value
+    """
+
     def __init__(self, pos, width, height, value):
         self.pos = pos
         self.width = width
@@ -9,6 +13,9 @@ class Button:
         self.value = value
 
     def draw(self, img):
+        """
+        Draw button on the image with background and border
+        """
         cv2.rectangle(img, self.pos, (self.pos[0] + self.width, self.pos[1] + self.height),
                       (225, 225, 225), cv2.FILLED)
         cv2.rectangle(img, self.pos, (self.pos[0] + self.width, self.pos[1] + self.height),
@@ -21,29 +28,27 @@ class Button:
                     3, (50, 50, 50), 3)
 
 
-# MUST be configured for each system
-# here would be 0 or 1 for most systems, but mine is 2
+# Camera configuration
+# Index 0 is usually the default camera (may vary by system)
 cap = cv2.VideoCapture(0)
-# it is the webcam address, in my case in /dev/video2
 
-# input image size, based on your webcam
-# These two lines must be changed with the webcam resolution
-# obtained from src/test/camera_resolution_test.py
-WIDTH = 640
-HEIGHT = 480
-cap.set(3, WIDTH)
-cap.set(4, HEIGHT)
+# Camera resolution (actual hardware capability)
+CAM_WIDTH = 640
+CAM_HEIGHT = 480
+cap.set(3, CAM_WIDTH)
+cap.set(4, CAM_HEIGHT)
 
+# Display resolution (target fullscreen resolution)
+WIDTH = 1920
+HEIGHT = 1080
 
-# Change the window to occupy all the pc screen
+# Create fullscreen window
 cv2.namedWindow("Calculator", cv2.WND_PROP_FULLSCREEN)
 cv2.setWindowProperty(
     "Calculator", cv2.WND_PROP_FULLSCREEN, cv2.WINDOW_FULLSCREEN)
 
-
-# basic list of buttons, may be changed (changes must be justified)
+# Calculator button layout
 buttonListValues = [['C', '<'],
-                    # ÷ cant be rendered, so well have to do with / :/
                     ['7', '8', '9', '/'],
                     ['4', '5', '6', '*'],
                     ['1', '2', '3', '-'],
@@ -52,76 +57,52 @@ buttonListValues = [['C', '<'],
 buttonlist = []
 for y in range(5):
     for x in range(4):
-        # first row only has 2 buttons (C and <), so kinda special case
+        # First row only has 2 buttons (C and <)
         if y == 0 and x >= 2:
             break
 
-        # For 1080p cam
-        # xpos = int(WIDTH - 500 + x * 100)
-        # For 640p cam
-        xpos = int(WIDTH - 340 + x * 80)
+        xpos = int(WIDTH - 500 + x * 100)
+        ypos = int(HEIGHT * 0.15 + y * 100)
 
-        # For 1080p cam
-        # ypos = int(HEIGHT * 0.15 + y * 100)
-        # For 640p cam
-        ypos = int(HEIGHT * 0.15 + y * 80)
-
-        # first row special case, second button needs to be shifted
-        if y == 0 and x == 1:  # not the most elegant
-            # For 1080p cam
-            # xpos += 100
-            # For 640p cam
-            xpos += 80
+        # First row special case: second button needs to be shifted
+        if y == 0 and x == 1:
+            xpos += 100
 
         if y == 0:
-            # For 1080p cam
-            # width = 200
-            # buttonlist.append(Button((xpos, ypos), width, 100, buttonListValues[y][x]))
-            # For 640p cam
-            width = 160
+            # First row has wider buttons
+            width = 200
             buttonlist.append(Button((xpos, ypos), width,
-                              80, buttonListValues[y][x]))
+                              100, buttonListValues[y][x]))
         else:
-            # For 1080p cam
-            # buttonlist.append(Button((xpos, ypos), 100, 100, buttonListValues[y][x]))
-            # For 640p cam
             buttonlist.append(
-                Button((xpos, ypos), 80, 80, buttonListValues[y][x]))
+                Button((xpos, ypos), 100, 100, buttonListValues[y][x]))
 
 operation = ""
 
 while True:
     success, img = cap.read()
 
-    # Resize the image to fullscreen
-
+    # Resize camera feed to fullscreen resolution BEFORE drawing UI elements
     img = cv2.resize(img, (WIDTH, HEIGHT), interpolation=cv2.INTER_LINEAR)
 
-    # For 1080p cam
-    # operation_x = int(WIDTH - 500)
-    # For 640p cam
-    operation_x = int(WIDTH - 340)
-
+    # Display area for operation string
+    operation_x = int(WIDTH - 500)
     operation_y = int(HEIGHT * 0.05)
 
-    # For 1080p cam
-    # cv2.rectangle(img, (operation_x, operation_y), (operation_x + 400, operation_y + 120),
-    #               (225, 225, 225), cv2.FILLED)
-    # cv2.rectangle(img, (operation_x, operation_y), (operation_x + 400, operation_y + 120),
-    #               (50, 50, 50), 3)
-    # For 640p cam
-    cv2.rectangle(img, (operation_x, operation_y), (operation_x + 320, operation_y + 80),
+    cv2.rectangle(img, (operation_x, operation_y), (operation_x + 400, operation_y + 120),
                   (225, 225, 225), cv2.FILLED)
-    cv2.rectangle(img, (operation_x, operation_y), (operation_x + 320, operation_y + 80),
+    cv2.rectangle(img, (operation_x, operation_y), (operation_x + 400, operation_y + 120),
                   (50, 50, 50), 3)
 
+    # Draw all calculator buttons
     for button in buttonlist:
         button.draw(img)
 
-    # when something triggers, the calculator should actually calculate
-    # the something should be programmed by you, of course
+    # TODO: Implement gesture detection here
+    # When a gesture is detected, set something=True and received_val to button value
     something = False
     received_val = ""
+
     if something:
         if received_val == "=":
             try:
@@ -130,21 +111,21 @@ while True:
                 operation = "Error"
         elif received_val == "C":  # Reset
             operation = ""
-        elif received_val == "<":  # remove char
+        elif received_val == "<":  # Remove last character
             operation = operation[:-1]
         else:
             operation += received_val
-        delayCounter = 1
 
-    # For 1080p cam
-    # cv2.putText(img, operation, (operation_x + 10, operation_y + 75),
-    #             cv2.FONT_HERSHEY_PLAIN, 3, (50, 50, 50), 3)
-    # For 640p cam
-    cv2.putText(img, operation, (operation_x + 10, operation_y + 50),
-                cv2.FONT_HERSHEY_PLAIN, 2, (50, 50, 50), 2)
+    # Display operation string
+    cv2.putText(img, operation, (operation_x + 10, operation_y + 75),
+                cv2.FONT_HERSHEY_PLAIN, 3, (50, 50, 50), 3)
 
     cv2.imshow('Calculator', img)
 
+    # Press 'q' to quit
     key = cv2.waitKey(1)
     if key == ord('q'):
         break
+
+cap.release()
+cv2.destroyAllWindows()
