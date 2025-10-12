@@ -34,6 +34,13 @@ HEIGHT = 480
 cap.set(3, WIDTH)
 cap.set(4, HEIGHT)
 
+
+# Change the window to occupy all the pc screen
+cv2.namedWindow("Calculator", cv2.WND_PROP_FULLSCREEN)
+cv2.setWindowProperty(
+    "Calculator", cv2.WND_PROP_FULLSCREEN, cv2.WINDOW_FULLSCREEN)
+
+
 # basic list of buttons, may be changed (changes must be justified)
 buttonListValues = [['C', '<'],
                     # ÷ cant be rendered, so well have to do with / :/
@@ -85,6 +92,10 @@ operation = ""
 
 while True:
     success, img = cap.read()
+
+    # Resize the image to fullscreen
+
+    img = cv2.resize(img, (WIDTH, HEIGHT), interpolation=cv2.INTER_LINEAR)
 
     # For 1080p cam
     # operation_x = int(WIDTH - 500)
