@@ -26,14 +26,37 @@ Gesture-based calculator using webcam and hand detection. Perform calculations n
 ## Project Structure
 
 ```
-src/
-├── gest-calc/
-│   ├── main.py                    # Application entry
-│   ├── ui/                        # User interface components
-│   ├── gesture/                   # Gesture recognition system
-│   ├── calculator/                # Calculator logic
-│   └── utils/                     # Helper utilities
-└── test/                          # Testing utilities
+Sign2Calc/
+├── src/
+│   ├── gest-calc/
+│   │   ├── main.py                    # Entry point
+│   │   ├── config.py                  # Constants (resolution, colors, etc)
+│   │   │
+│   │   ├── ui/
+│   │   │   ├── components.py          # Button, TextDisplay classes
+│   │   │   ├── calculator_display.py  # UI renderer
+│   │   │   └── layout_manager.py      # Layout calculations
+│   │   │
+│   │   ├── gesture/
+│   │   │   ├── hand_detector.py       # MediaPipe hand detection
+│   │   │   ├── gesture_recognizer.py  # Classify gestures from landmarks
+│   │   │   ├── gesture_mapper.py      # Map gestures → buttons
+│   │   │   └── gesture_stabilizer.py  # Filter false positives
+│   │   │
+│   │   ├── calculator/
+│   │   │   └── calculator_logic.py    # Operations and state
+│   │   │
+│   │   └── utils/
+│   │       ├── camera_manager.py      # Camera initialization
+│   │       └── fps_counter.py         # Performance monitoring
+│   │
+│   └── test/
+│       └── camera_resolution_test.py  # Test utilities
+│
+├── docs/
+├── Dockerfile
+├── Makefile
+└── requirements.txt                         # Testing utilities
 ```
 
 ## Quick Start
