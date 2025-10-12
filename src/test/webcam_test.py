@@ -8,8 +8,8 @@ if not cap.isOpened():
     exit(1)
 
 # These two lines must be changed with the webcam resolution obtained from src/test/camera_resolution_test.py
-cap.set(cv2.CAP_PROP_FRAME_WIDTH, 1920)
-cap.set(cv2.CAP_PROP_FRAME_HEIGHT, 1080)
+cap.set(cv2.CAP_PROP_FRAME_WIDTH, 640)
+cap.set(cv2.CAP_PROP_FRAME_HEIGHT, 480)
 
 print("Video capture started at {}x{}".format(
     int(cap.get(cv2.CAP_PROP_FRAME_WIDTH)),

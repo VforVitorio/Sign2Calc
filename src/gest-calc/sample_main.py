@@ -27,8 +27,10 @@ cap = cv2.VideoCapture(0)
 # it is the webcam address, in my case in /dev/video2
 
 # input image size, based on your webcam
-WIDTH = 1920
-HEIGHT = 1080
+# These two lines must be changed with the webcam resolution
+# obtained from src/test/camera_resolution_test.py
+WIDTH = 640
+HEIGHT = 480
 cap.set(3, WIDTH)
 cap.set(4, HEIGHT)
 
@@ -47,32 +49,59 @@ for y in range(5):
         if y == 0 and x >= 2:
             break
 
-        xpos = int(WIDTH - 500 + x * 100)
-        ypos = int(HEIGHT * 0.15 + y * 100)
+        # For 1080p cam
+        # xpos = int(WIDTH - 500 + x * 100)
+        # For 640p cam
+        xpos = int(WIDTH - 340 + x * 80)
+
+        # For 1080p cam
+        # ypos = int(HEIGHT * 0.15 + y * 100)
+        # For 640p cam
+        ypos = int(HEIGHT * 0.15 + y * 80)
 
         # first row special case, second button needs to be shifted
         if y == 0 and x == 1:  # not the most elegant
-            xpos += 100
+            # For 1080p cam
+            # xpos += 100
+            # For 640p cam
+            xpos += 80
 
         if y == 0:
-            width = 200
+            # For 1080p cam
+            # width = 200
+            # buttonlist.append(Button((xpos, ypos), width, 100, buttonListValues[y][x]))
+            # For 640p cam
+            width = 160
             buttonlist.append(Button((xpos, ypos), width,
-                              100, buttonListValues[y][x]))
+                              80, buttonListValues[y][x]))
         else:
+            # For 1080p cam
+            # buttonlist.append(Button((xpos, ypos), 100, 100, buttonListValues[y][x]))
+            # For 640p cam
             buttonlist.append(
-                Button((xpos, ypos), 100, 100, buttonListValues[y][x]))
+                Button((xpos, ypos), 80, 80, buttonListValues[y][x]))
 
 operation = ""
 
 while True:
     success, img = cap.read()
 
-    operation_x = int(WIDTH - 500)
+    # For 1080p cam
+    # operation_x = int(WIDTH - 500)
+    # For 640p cam
+    operation_x = int(WIDTH - 340)
+
     operation_y = int(HEIGHT * 0.05)
 
-    cv2.rectangle(img, (operation_x, operation_y), (operation_x + 400, operation_y + 120),
+    # For 1080p cam
+    # cv2.rectangle(img, (operation_x, operation_y), (operation_x + 400, operation_y + 120),
+    #               (225, 225, 225), cv2.FILLED)
+    # cv2.rectangle(img, (operation_x, operation_y), (operation_x + 400, operation_y + 120),
+    #               (50, 50, 50), 3)
+    # For 640p cam
+    cv2.rectangle(img, (operation_x, operation_y), (operation_x + 320, operation_y + 80),
                   (225, 225, 225), cv2.FILLED)
-    cv2.rectangle(img, (operation_x, operation_y), (operation_x + 400, operation_y + 120),
+    cv2.rectangle(img, (operation_x, operation_y), (operation_x + 320, operation_y + 80),
                   (50, 50, 50), 3)
 
     for button in buttonlist:
@@ -96,8 +125,12 @@ while True:
             operation += received_val
         delayCounter = 1
 
-    cv2.putText(img, operation, (operation_x + 10, operation_y + 75),
-                cv2.FONT_HERSHEY_PLAIN, 3, (50, 50, 50), 3)
+    # For 1080p cam
+    # cv2.putText(img, operation, (operation_x + 10, operation_y + 75),
+    #             cv2.FONT_HERSHEY_PLAIN, 3, (50, 50, 50), 3)
+    # For 640p cam
+    cv2.putText(img, operation, (operation_x + 10, operation_y + 50),
+                cv2.FONT_HERSHEY_PLAIN, 2, (50, 50, 50), 2)
 
     cv2.imshow('Calculator', img)
 
