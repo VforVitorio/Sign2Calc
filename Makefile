@@ -30,7 +30,7 @@ run:
 		--privileged \
 		--gpus all \
 		--rm \
-		$(IMAGE) python /opt/project/src/gest-calc/sample_main.py
+		$(IMAGE) python /opt/project/src/gest-calc/main.py
 
 
 shell:
