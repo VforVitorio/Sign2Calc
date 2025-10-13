@@ -16,6 +16,7 @@ from config import (
 )
 from ui import Button
 from calculator import CalculatorLogic
+from gesture import HandDetector, GestureRecognizer
 
 
 def create_buttons():
@@ -67,6 +68,11 @@ def main():
     calculator = CalculatorLogic()
     buttons = create_buttons()
 
+    # Initialize gesture detection
+    hand_detector = HandDetector(
+        max_hands=1, detection_confidence=0.7, tracking_confidence=0.7)
+    gesture_recognizer = GestureRecognizer()
+
     print(f"Sign2Calc started - Press '{QUIT_KEY}' to quit")
 
     # Main loop
@@ -81,6 +87,25 @@ def main():
         img = cv2.resize(img, (DISPLAY_WIDTH, DISPLAY_HEIGHT),
                          interpolation=cv2.INTER_LINEAR)
 
+        # Detect hands and draw landmarks
+        img = hand_detector.find_hands(img, draw=True)
+
+        # Get hand landmarks
+        landmark_list = hand_detector.find_position(img)
+
+        # Recognize gesture if hand detected
+        current_gesture = None
+        if landmark_list:
+            current_gesture = gesture_recognizer.recognize(landmark_list)
+
+            # Display detected gesture for debugging
+            if current_gesture:
+                gesture_desc = gesture_recognizer.get_gesture_description(
+                    current_gesture)
+                gesture_text = f"{current_gesture}: {gesture_desc}"
+                cv2.putText(img, gesture_text, (50, 50),
+                            cv2.FONT_HERSHEY_PLAIN, 2, (0, 255, 0), 2)
+
         # Display area for operation string
         operation_x = int(DISPLAY_WIDTH - 500)
         operation_y = int(DISPLAY_HEIGHT * 0.05)
@@ -93,14 +118,6 @@ def main():
         # Draw all calculator buttons
         for button in buttons:
             button.draw(img)
-
-        # TODO: Implement gesture detection here
-        # When a gesture is detected, set something=True and received_val to button value
-        something = False
-        received_val = ""
-
-        if something:
-            calculator.process_input(received_val)
 
         # Display operation string
         cv2.putText(img, calculator.get_operation(), (operation_x + 10, operation_y + 75),
