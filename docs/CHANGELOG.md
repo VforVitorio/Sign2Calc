@@ -5,6 +5,33 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.2.0] - 2025-10-13 [Released]
+
+### Added
+
+- **Modular Architecture** - Implemented complete modular structure following ROADMAP design
+- **Configuration System** (`config.py`) - Centralized configuration for camera, display, UI colors, layout, and button definitions
+- **UI Components Module** (`ui/components.py`) - Reusable Button class with constructor and draw methods
+- **Calculator Logic Module** (`calculator/calculator_logic.py`) - Complete calculator state management and operations handler
+- **Main Application** (`main.py`) - New entry point with proper imports and application flow
+- **Module Structure** - Added `__init__.py` files for `ui` and `calculator` packages
+- **Project Structure** - Established directory structure with `.gitkeep` files for empty directories (`gesture/`, `utils/`)
+
+### Changed
+
+- **Makefile** - Updated `run` target to execute `main.py` instead of `sample_main.py`
+- **Project Organization** - Restructured codebase to follow modular design pattern
+
+### Fixed
+
+- **Button Text Positioning** - Corrected `text_y` calculation in `components.py` (line 69) from width to height
+- **Font Configuration** - Fixed FONT constant in `config.py` from `FONT = 0` to `FONT = cv2.FONT_HERSHEY_PLAIN`
+
+### Removed
+
+- **sample_main.py** - Removed in favor of modular `main.py`
+- **webcam_test.py** from gest-calc - Already moved to test directory in v1.1.0
+
 ## [1.1.0] - 2025-10-12 [Released]
 
 ### Added
