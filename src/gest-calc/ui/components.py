@@ -66,7 +66,7 @@ class Button:
 
         # Calculate the text position (centered)
         text_x = self.pos[0] + self.width // 2 - 15
-        text_y = self.pos[1] + self.width // 2 + 15
+        text_y = self.pos[1] + self.height // 2 + 15
 
         # Draw text
 

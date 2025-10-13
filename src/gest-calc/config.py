@@ -2,7 +2,7 @@
 Configuration file for Sign2Calc calculator
 Contains all constants used throughout the application
 """
-
+import cv2
 # =============================================================================
 # CAMERA CONFIGURATION
 # =============================================================================
@@ -66,7 +66,7 @@ BUTTON_VALUES = [
 # TEXT RENDERING
 # =============================================================================
 # Font configuration
-FONT = 0  # cv2.FONT_HERSHEY_PLAIN
+FONT = cv2.FONT_HERSHEY_PLAIN
 FONT_SCALE = 3
 FONT_THICKNESS = 3
 
