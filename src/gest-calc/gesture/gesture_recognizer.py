@@ -11,7 +11,7 @@ class GestureRecognizer:
 
     def __init__(self):
         """
-        Initalize gesture recognizer
+        Initialize gesture recognizer
         """
         # MediaPipe landmark indices
         # Thumb, Index, Middle, Ring, Pinky tips
@@ -27,7 +27,7 @@ class GestureRecognizer:
             landmark_list: List of landmarks from HandDetector in format [(id, x, y), ...]
 
         Returns:
-            str: Gesture name or None if no gesture recognizes
+            str: Gesture name or None if no gesture recognized
         """
 
         if not landmark_list or len(landmark_list) < 21:
@@ -37,7 +37,6 @@ class GestureRecognizer:
         fingers = self._get_fingers_up(landmark_list)
 
         # Classify gesture based on fingers up
-
         return self._classify_gesture(fingers)
 
     def _get_fingers_up(self, landmark_list):
@@ -52,8 +51,9 @@ class GestureRecognizer:
         """
         fingers = []
 
-        # Thumb: tip (4) further right than IP joint (3)
-        if landmark_list[self.tip_ids[0]][1] > landmark_list[self.tip_ids[0] - 1][1]:
+        # Thumb (RIGHT HAND): tip (4) further LEFT than IP joint (3)
+        # When thumb is extended, x coordinate is smaller
+        if landmark_list[self.tip_ids[0]][1] < landmark_list[self.tip_ids[0] - 1][1]:
             fingers.append(1)
         else:
             fingers.append(0)
@@ -91,6 +91,26 @@ class GestureRecognizer:
         if fingers == [0, 1, 1, 0, 0]:
             return "TWO_FINGERS"
 
+        # Open palm: all 4 fingers up (no thumb) - Addition (+)
+        if fingers[1:] == [1, 1, 1, 1]:  # Ignore thumb, check rest
+            return "PALM"
+
+        # Thumb up: only thumb extended (Subtraction -)
+        if fingers == [1, 0, 0, 0, 0]:
+            return "THUMB_UP"
+
+        # Pinky only: just pinky up (Multiplication ×)
+        if fingers == [0, 0, 0, 0, 1]:
+            return "PINKY"
+
+        # Shaka: thumb and pinky extended (Division ÷)
+        if fingers == [1, 0, 0, 0, 1]:
+            return "SHAKA"
+
+        # OK sign: thumb and index extended (Equals =)
+        if fingers == [1, 1, 0, 0, 0]:
+            return "OK_SIGN"
+
         # No recognized gesture
         return None
 
@@ -107,7 +127,12 @@ class GestureRecognizer:
         descriptions = {
             "FIST": "Start new digit (0)",
             "INDEX": "Increment digit (+1)",
-            "TWO_FINGERS": "Confirm digit"
+            "TWO_FINGERS": "Confirm digit",
+            "PALM": "Addition (+)",
+            "THUMB_UP": "Subtraction (-)",
+            "PINKY": "Multiplication (×)",
+            "SHAKA": "Division (÷)",
+            "OK_SIGN": "Equals (=)"
         }
 
         return descriptions.get(gesture_name, "Unknown gesture")

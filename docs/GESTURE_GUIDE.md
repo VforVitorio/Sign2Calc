@@ -1,29 +1,31 @@
 # Gesture Controls (single-hand)
 
-This section documents the single-hand gesture design used by Sign2Calc. It aims to be concise, implementation-ready, and focuses on robustness, accesibility and simple UX.
+This section documents the single-hand gesture design used by Sign2Calc. It aims to be concise, implementation-ready, and focuses on robustness, accessibility and simple UX.
+
+**Note:** These specific gestures were chosen because they are the ones MediaPipe detects most reliably and consistently based on testing.
 
 ### Design principles
 
 - **Single hand only** to reduce occlusion and detection complexity.
-- **Minimal and highly distinct gestures** that lower classificacion errors that could occur with one-to-ten finger counting.
-- **Incremental digit entry**, following ´activate -> increment -> confirm´.
+- **Minimal and highly distinct gestures** that lower classification errors that could occur with one-to-ten finger counting.
+- **Incremental digit entry**, following `activate -> increment -> confirm`.
 - **Visual feedback** in UI to close the interaction loop.
+- **MediaPipe-optimized gestures** selected for maximum detection accuracy.
 
 ---
 
 ## Gesture map
 
-|                 Gesture | Action                    |
-| ----------------------: | ------------------------- |
-|               👊 _Fist_ | Start digit (cursor at 0) |
-|              ☝️ _Index_ | Increment (+1 per repeat) |
-|        ✌️ _Two fingers_ | Confirm digit             |
-|          ✋ _Open palm_ | Addition (+)              |
-|         👎 _Thumb down_ | Subtraction (-)           |
-|   ✌️+👍 _Three fingers_ | Multiplication (×)        |
-|              🤙 _Shaka_ | Division (÷)              |
-| 👌 _Index+thumb circle_ | Equals (=)                |
-|       👊 _Hold fist 2s_ | Clear all                 |
+|          Gesture | Action                    |
+| ---------------: | ------------------------- |
+|         👊*Fist* | Start digit (cursor at 0) |
+|        ☝️*Index* | Increment (+1 per repeat) |
+|  ✌️*Two fingers* | Confirm digit             |
+|    ✋*Open palm* | Addition (+)              |
+|     👍*Thumb up* | Subtraction (−)           |
+| 🤙*Pinky (only)* | Multiplication (×)        |
+|        🤙*Shaka* | Division (÷)              |
+|      👌*OK sign* | Equals (=)                |
 
 ## Interaction flow example
 
@@ -35,7 +37,7 @@ This section documents the single-hand gesture design used by Sign2Calc. It aims
 4. `👊` → enter digit mode
 5. `☝️` ×5 → digit = 5
 6. `✌️` → confirm → operand = `15`
-7. `✋` → select + operation (directly)
+7. `✋` → select addition (+)
 8. `👊` → enter digit mode
 9. `☝️` ×8 → digit = 8
 10. `✌️` → confirm → second operand = `8`
@@ -63,4 +65,8 @@ This section documents the single-hand gesture design used by Sign2Calc. It aims
 
 ## Why this approach
 
-This gesture system prioritizes reliability and accessibility by using a small set of highly distinctive hand shapes that are easy to detect and hard to confuse. By relying on a single hand, we avoid occlusion issues while keeping interactions simple and natural. The incremental entry pattern scales to any number without adding complexity, and the straightforward gestures work well for users with varying levels of hand mobility, making the calculator genuinely more inclusive.
+This gesture system prioritizes reliability and accessibility by using a small set of highly distinctive hand shapes that are easy to detect and hard to confuse.
+
+**MediaPipe Detection Optimization:** Through testing, these specific gestures (fist, index, two fingers, palm, thumb up, pinky only, shaka, and middle finger) were found to be the most reliably detected by MediaPipe's hand landmark detection system. They provide clear finger position patterns that minimize false positives and confusion between gestures.
+
+By relying on a single hand, we avoid occlusion issues while keeping interactions simple and natural. The incremental entry pattern scales to any number without adding complexity, and the straightforward gestures work well for users with varying levels of hand mobility, making the calculator genuinely more inclusive.
