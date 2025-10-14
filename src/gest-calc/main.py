@@ -16,7 +16,7 @@ from config import (
 )
 from ui import Button
 from calculator import CalculatorLogic
-from gesture import HandDetector, GestureRecognizer, GestureStabilizer
+from gesture import HandDetector, GestureRecognizer, GestureStabilizer, GestureMapper
 
 
 def create_buttons():
@@ -64,8 +64,9 @@ def main():
     cv2.setWindowProperty(
         WINDOW_NAME, cv2.WND_PROP_FULLSCREEN, cv2.WINDOW_FULLSCREEN)
 
-    # Initialize calculator and buttons
+    # Initialize calculator, gesture mapper and buttons
     calculator = CalculatorLogic()
+    gesture_mapper = GestureMapper(calculator)
     buttons = create_buttons()
 
     # Initialize gesture detection
@@ -110,15 +111,10 @@ def main():
 
         # Handle confirmed gesture
         if result['gesture']:
+            gesture_mapper.handle(result['gesture'])
             gesture_desc = gesture_recognizer.get_gesture_description(
                 result['gesture'])
             print(f"Confirmed: {result['gesture']} - {gesture_desc}")
-            # TODO: Send to calculator logic
-
-        # Handle timeout
-        if result['timeout']:
-            print("Input timeout - resetting")
-            # TODO: Auto-save or cancel digit entry
 
         # Display debug info
         status = gesture_stabilizer.get_status()

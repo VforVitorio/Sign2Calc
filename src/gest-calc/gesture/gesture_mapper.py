@@ -18,7 +18,7 @@ class GestureMapper:
         self.gesture_map = {
             "FIST": self._handle_fist,
             "INDEX": self._handle_index,
-            "TWO_FINGERS": self._handle_twi_fingers,
+            "TWO_FINGERS": self._handle_two_fingers,
             "PALM": self._handle_palm,
             "THUMB_UP": self._handle_thumb_up,
             "PINKY": self._handle_pinky,
