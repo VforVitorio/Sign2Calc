@@ -1,6 +1,6 @@
 """
-Calculator logic for Sign2Calc
-Handles mathematical operations and state management
+Calculator logic module
+Handles calculator state and operations
 """
 
 
@@ -11,74 +11,101 @@ class CalculatorLogic:
 
     def __init__(self):
         """
-        Constructor: initialize calculator with empty operation string
+        Initialize calculator state
         """
         self.operation = ""
+        self.current_digit = 0
+        self.digit_mode = False
 
-    def process_input(self, value):
+    def start_digit(self):
         """
-        Process a button input and update calculator state
+        Enter digit mode and reset current digit to 0
+        """
+        self.digit_mode = True
+        self.current_digit = 0
+
+    def increment_digit(self):
+        """
+        Increment current digit by 1 (wraps at 10)
+        Only works in digit mode
+        """
+        if self.digit_mode:
+            self.current_digit = (self.current_digit + 1) % 10
+
+    def confirm_digit(self):
+        """
+        Confirm current digit and add to operation
+        Exits digit mode
+        """
+        if self.digit_mode:
+            self.operation += str(self.current_digit)
+            self.digit_mode = False
+            self.current_digit = 0
+
+    def add_operator(self, operator):
+        """
+        Add operator to operation
+        Auto-confirms digit if in digit mode
 
         Args:
-            value: String representing button pressed ('0'-'9', '+', '-', '*', '/', '=', 'C', '<', '.')
-
-        Returns:
-            str: Current operation string after processing
-
+            operator: Operator string ("+", "-", "*", "/")
         """
+        if self.digit_mode:
+            self.confirm_digit()
+        self.operation += operator
 
-        if value == "=":
-            self._evaluate()
-        elif value == "C":
-            self._clear()
-        elif value == "<":
-            self._backspace()
-        else:
-            self._append(value)
-
-        return self.operation
-
-    def _evaluate(self):
+    def calculate(self):
         """
-        Evaluate the current operation string
-        Sets operation to result or "Error" if invalid
+        Evaluate operation and display result
+        Handles errors gracefully
         """
-
         try:
             self.operation = str(eval(self.operation))
+            self.digit_mode = False
         except:
             self.operation = "Error"
+            self.digit_mode = False
 
-    def _clear(self):
+    def clear(self):
         """
-        Reset operation to empty string
+        Reset calculator to initial state
         """
-
         self.operation = ""
+        self.current_digit = 0
+        self.digit_mode = False
 
-    def _backspace(self):
+    def backspace(self):
         """
         Remove last character from operation
         """
-
-        self.operation = self.operation[:-1]
-
-    def _append(self, value):
-        """
-        Append a value to the operation string
-
-        Args:
-            value: Character to append
-        """
-
-        self.operation += value
+        if len(self.operation) > 0:
+            self.operation = self.operation[:-1]
 
     def get_operation(self):
         """
-        Get current operation string
+        Get current operation string for display
 
         Returns:
-            str: current operation
+            str: Operation string (with current digit if in digit mode)
         """
-
+        if self.digit_mode:
+            return self.operation + str(self.current_digit)
         return self.operation
+
+    def get_current_digit(self):
+        """
+        Get current digit being built
+
+        Returns:
+            int: Current digit (0-9)
+        """
+        return self.current_digit
+
+    def is_digit_mode(self):
+        """
+        Check if calculator is in digit mode
+
+        Returns:
+            bool: True if in digit mode
+        """
+        return self.digit_mode
