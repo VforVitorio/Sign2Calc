@@ -16,7 +16,7 @@ from config import (
 )
 from ui import Button
 from calculator import CalculatorLogic
-from gesture import HandDetector, GestureRecognizer
+from gesture import HandDetector, GestureRecognizer, GestureStabilizer
 
 
 def create_buttons():
@@ -72,6 +72,15 @@ def main():
     hand_detector = HandDetector(
         max_hands=1, detection_confidence=0.7, tracking_confidence=0.7)
     gesture_recognizer = GestureRecognizer()
+    gesture_stabilizer = GestureStabilizer(fps=30)
+
+    # Configure stabilizer
+    gesture_stabilizer.configure(
+        hold_threshold_s=0.7,
+        increment_cooldown_s=0.5,
+        confirmation_cooldown_s=0.5,
+        input_timeout_s=6.0
+    )
 
     print(f"Sign2Calc started - Press '{QUIT_KEY}' to quit")
 
@@ -83,28 +92,46 @@ def main():
             print("Failed to read from camera")
             break
 
-        # Resize camera feed to fullscreen resolution BEFORE drawing UI elements
+        # Resize camera feed to fullscreen resolution
         img = cv2.resize(img, (DISPLAY_WIDTH, DISPLAY_HEIGHT),
                          interpolation=cv2.INTER_LINEAR)
 
         # Detect hands and draw landmarks
         img = hand_detector.find_hands(img, draw=True)
-
-        # Get hand landmarks
         landmark_list = hand_detector.find_position(img)
 
-        # Recognize gesture if hand detected
-        current_gesture = None
+        # Recognize and stabilize gesture
+        detected_gesture = None
         if landmark_list:
-            current_gesture = gesture_recognizer.recognize(landmark_list)
+            detected_gesture = gesture_recognizer.recognize(landmark_list)
 
-            # Display detected gesture for debugging
-            if current_gesture:
-                gesture_desc = gesture_recognizer.get_gesture_description(
-                    current_gesture)
-                gesture_text = f"{current_gesture}: {gesture_desc}"
-                cv2.putText(img, gesture_text, (50, 50),
-                            cv2.FONT_HERSHEY_PLAIN, 2, (0, 255, 0), 2)
+        # Stabilize gesture
+        result = gesture_stabilizer.update(detected_gesture)
+
+        # Handle confirmed gesture
+        if result['gesture']:
+            gesture_desc = gesture_recognizer.get_gesture_description(
+                result['gesture'])
+            print(f"Confirmed: {result['gesture']} - {gesture_desc}")
+            # TODO: Send to calculator logic
+
+        # Handle timeout
+        if result['timeout']:
+            print("Input timeout - resetting")
+            # TODO: Auto-save or cancel digit entry
+
+        # Display debug info
+        status = gesture_stabilizer.get_status()
+        if status['current_gesture']:
+            desc = gesture_recognizer.get_gesture_description(
+                status['current_gesture'])
+            cv2.putText(img, f"Detecting: {status['current_gesture']} - {desc} ({status['progress']})",
+                        (10, 30), cv2.FONT_HERSHEY_PLAIN, 2, (0, 255, 0), 2)
+        if status['last_confirmed']:
+            desc = gesture_recognizer.get_gesture_description(
+                status['last_confirmed'])
+            cv2.putText(img, f"Last: {status['last_confirmed']} - {desc}",
+                        (10, 60), cv2.FONT_HERSHEY_PLAIN, 2, (0, 255, 255), 2)
 
         # Display area for operation string
         operation_x = int(DISPLAY_WIDTH - 500)
