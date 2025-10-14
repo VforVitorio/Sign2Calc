@@ -5,6 +5,54 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.0.0] - 2025-10-14 [Released]
+
+### Added
+
+- **Complete Gesture Recognition System** - Full implementation of 8 distinct hand gestures optimized for MediaPipe detection
+  - 👊 Fist: Start digit entry mode (cursor at 0)
+  - ☝️ Index: Increment digit (+1 per repeat)
+  - ✌️ Two fingers: Confirm digit
+  - ✋ Open palm: Addition operator (+)
+  - 👍 Thumb up: Subtraction operator (−)
+  - 🤙 Pinky only: Multiplication operator (×)
+  - 🤙 Shaka: Division operator (÷)
+  - 👌 OK sign: Equals/Calculate (=)
+- **Hand Detector Module** (`gesture/hand_detector.py`) - MediaPipe-based hand tracking and landmark extraction
+- **Gesture Recognizer** (`gesture/gesture_recognizer.py`) - Finger position analysis and gesture classification
+- **Gesture Stabilizer** (`gesture/gesture_stabilizer.py`) - Advanced gesture confirmation system with:
+  - Hold threshold for static gestures (0.5-1s)
+  - Increment cooldown for repeated increments
+  - Confirmation cooldown to avoid duplicates
+  - Temporal smoothing and false positive filtering
+- **Gesture Mapper** (`gesture/gesture_mapper.py`) - Maps confirmed gestures to calculator actions
+- **Gesture Package** - Added `__init__.py` with proper exports for gesture module
+- **Comprehensive Gesture Guide** (`docs/GESTURE_GUIDE.md`) - Complete documentation with:
+  - Design principles and rationale
+  - Full gesture map and interaction flow examples
+  - Detection heuristics and UI feedback guidelines
+  - MediaPipe optimization notes
+- **MediaPipe Integration** - Added `mediapipe` dependency to `requirements.txt`
+- **Real-time Visual Feedback** - Display of current operation and last detected gesture in UI
+
+### Changed
+
+- **Calculator Logic** - Updated `calculator_logic.py` to integrate with gesture recognition system
+- **Main Application** - Enhanced `main.py` with full gesture detection pipeline and visual feedback
+- **Interaction Model** - Implemented incremental digit entry system (activate → increment → confirm)
+
+### Technical Improvements
+
+- **Single-Hand Detection** - Optimized for single hand to reduce occlusion and complexity
+- **Robust Gesture Classification** - Selected gestures with highest MediaPipe detection accuracy
+- **Temporal Consistency** - Added smoothing algorithms to prevent false positives during hand movements
+
+### Known Limitations
+
+- **Gesture Retention Issue** - Maintaining a gesture after detection may trigger duplicate actions without requiring gesture change
+- **UI Design Pending** - Current interface is functional but requires refinement to match planned design specifications
+- **Stabilizer Fine-tuning** - Cooldown timers and hold thresholds may need adjustment for optimal UX
+
 ## [1.2.0] - 2025-10-13 [Released]
 
 ### Added
