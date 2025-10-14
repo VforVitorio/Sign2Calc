@@ -1,27 +1,36 @@
 # Sign2Calc
 
-Gesture-based calculator using webcam and hand detection. Perform calculations naturally with hand gestures.
+Gesture-based calculator using webcam and hand detection. Perform calculations naturally with hand gestures through an innovative incremental digit entry system.
 
 ## Features
 
-### Basic Operations
+### Gesture-Controlled Operations
 
-- **Addition** (+)
-- **Subtraction** (-)
-- **Multiplication** (\*)
-- **Division** (/)
-- **Clear** (C) - Reset calculator
-- **Backspace** (<) - Remove last character
-- **Equals** (=) - Calculate result
-- **Decimal** (.) - Decimal point
+Sign2Calc uses **8 distinct hand gestures** optimized for MediaPipe detection:
+
+- 👊 **Fist** - Start digit entry mode (cursor at 0)
+- ☝️ **Index** - Increment digit (+1 per repeat)
+- ✌️ **Two Fingers** - Confirm digit
+- ✋ **Open Palm** - Addition (+)
+- 👍 **Thumb Up** - Subtraction (−)
+- 🤙 **Pinky Only** - Multiplication (×)
+- 🤙 **Shaka** - Division (÷)
+- 👌 **OK Sign** - Equals/Calculate (=)
 
 ### How It Works
 
-1. Show hand gestures to camera
-2. System recognizes gesture (numbers/operations)
-3. Calculator updates display
-4. Visual feedback shows detected gesture
-5. Press '=' gesture to calculate
+1. **Make a fist** (👊) to start entering a digit
+2. **Raise index finger** (☝️) repeatedly to increment the digit (0→1→2→3...)
+3. **Show two fingers** (✌️) to confirm the digit
+4. **Select an operation** using the corresponding gesture (✋ for +, 👍 for -, etc.)
+5. **Repeat steps 1-3** to enter the next number
+6. **Make OK sign** (👌) to calculate the result
+
+**Example:** To compute `15 + 8`:
+
+- 👊 → ☝️ (1 time) → ✌️ → 👊 → ☝️ (5 times) → ✌️ → ✋ → 👊 → ☝️ (8 times) → ✌️ → 👌
+
+For more details, see [GESTURE_GUIDE.md](docs/GESTURE_GUIDE.md).
 
 ## Project Structure
 
@@ -33,30 +42,32 @@ Sign2Calc/
 │   │   ├── config.py                  # Constants (resolution, colors, etc)
 │   │   │
 │   │   ├── ui/
-│   │   │   ├── components.py          # Button, TextDisplay classes
-│   │   │   ├── calculator_display.py  # UI renderer
-│   │   │   └── layout_manager.py      # Layout calculations
+│   │   │   └── components.py          # Button class for UI elements
 │   │   │
 │   │   ├── gesture/
 │   │   │   ├── hand_detector.py       # MediaPipe hand detection
 │   │   │   ├── gesture_recognizer.py  # Classify gestures from landmarks
-│   │   │   ├── gesture_mapper.py      # Map gestures → buttons
-│   │   │   └── gesture_stabilizer.py  # Filter false positives
+│   │   │   ├── gesture_mapper.py      # Map gestures → calculator actions
+│   │   │   └── gesture_stabilizer.py  # Temporal smoothing & false positive filtering
 │   │   │
 │   │   ├── calculator/
-│   │   │   └── calculator_logic.py    # Operations and state
+│   │   │   └── calculator_logic.py    # Calculator state & operations
 │   │   │
-│   │   └── utils/
-│   │       ├── camera_manager.py      # Camera initialization
-│   │       └── fps_counter.py         # Performance monitoring
+│   │   └── utils/                     # (Reserved for future utilities)
 │   │
 │   └── test/
-│       └── camera_resolution_test.py  # Test utilities
+│       ├── camera_resolution_test.py  # Camera capability testing
+│       └── webcam_test.py             # Basic webcam functionality test
 │
 ├── docs/
+│   ├── CHANGELOG.md                   # Version history
+│   ├── GESTURE_GUIDE.md               # Complete gesture documentation
+│   └── ROADMAP.md                     # Architecture & future plans
+│
 ├── Dockerfile
 ├── Makefile
-└── requirements.txt                         # Testing utilities
+├── requirements.txt
+└── LICENSE
 ```
 
 ## Quick Start
@@ -87,22 +98,38 @@ make shell
 
 ## Requirements
 
-- Docker
+- Python 3.9+
 - Webcam
-- X11 (for GUI display)
+- (Optional) Docker for containerized environment
 
 ## Tech Stack
 
 - **Python 3.9**
 - **OpenCV** - Image processing and GUI
-- **MediaPipe** - Hand landmark detection
-- **Docker** - Containerized environment
+- **MediaPipe** - Hand landmark detection and tracking
+- **Docker** - Containerized environment (optional)
+
+## Documentation
+
+- **[GESTURE_GUIDE.md](docs/GESTURE_GUIDE.md)** - Complete gesture system documentation with design principles and usage examples
+- **[ROADMAP.md](docs/ROADMAP.md)** - Architecture details and future development plans
+- **[CHANGELOG.md](docs/CHANGELOG.md)** - Version history and release notes
+
+## Current Status
+
+**Version 2.0.0** - First functional release with complete gesture recognition system.
+
+### Known Limitations
+
+- UI design requires refinement to match planned specifications
+- Gesture stabilizer needs fine-tuning for optimal cooldown timers
+- Gesture retention issue: maintaining a gesture after detection may trigger duplicate actions
+
+See [CHANGELOG.md](docs/CHANGELOG.md) for detailed release notes.
 
 ## Course
 
 Created for Intelligent Interactive Systems (UIE - 4th year).
-
-See [ROADMAP.md](https://claude.ai/chat/docs/ROADMAP.md) for architecture details.
 
 ## License
 
