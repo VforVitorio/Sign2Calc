@@ -14,6 +14,7 @@ class CalculatorLogic:
         Initialize calculator state
         """
         self.operation = ""
+        self.result = None
         self.current_digit = 0
         self.digit_mode = False
 
@@ -60,10 +61,11 @@ class CalculatorLogic:
         Handles errors gracefully
         """
         try:
-            self.operation = str(eval(self.operation))
+            # Store result separately, keep operation for display
+            self.result = str(eval(self.operation))
             self.digit_mode = False
         except:
-            self.operation = "Error"
+            self.result = "Error"
             self.digit_mode = False
 
     def clear(self):
@@ -71,14 +73,20 @@ class CalculatorLogic:
         Reset calculator to initial state
         """
         self.operation = ""
+        self.result = None
         self.current_digit = 0
         self.digit_mode = False
 
     def backspace(self):
         """
         Remove last character from operation
+        Clears result if present
         """
-        if len(self.operation) > 0:
+        # Clear result if it exists
+        if self.result is not None:
+            self.result = None
+        # Remove last character from operation
+        elif len(self.operation) > 0:
             self.operation = self.operation[:-1]
 
     def get_operation(self):
@@ -109,3 +117,12 @@ class CalculatorLogic:
             bool: True if in digit mode
         """
         return self.digit_mode
+
+    def get_result(self):
+        """
+        Get the calculated result
+
+        Returns:
+            str or None: Result string or None if no result yet
+        """
+        return self.result
