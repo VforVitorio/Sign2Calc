@@ -3,6 +3,7 @@ Configuration file for Sign2Calc calculator
 Contains all constants used throughout the application
 """
 import cv2
+
 # =============================================================================
 # CAMERA CONFIGURATION
 # =============================================================================
@@ -28,28 +29,77 @@ BUTTON_BG_COLOR = (225, 225, 225)  # Light gray
 BUTTON_BORDER_COLOR = (50, 50, 50)  # Dark gray
 BUTTON_TEXT_COLOR = (50, 50, 50)   # Dark gray
 
+# Button highlight colors (when gesture detects them)
+BUTTON_HIGHLIGHT_COLOR = (100, 255, 100)  # Light green
+BUTTON_HIGHLIGHT_BORDER = (0, 200, 0)     # Green
+
 # Display area colors
 DISPLAY_BG_COLOR = (225, 225, 225)
 DISPLAY_BORDER_COLOR = (50, 50, 50)
 DISPLAY_TEXT_COLOR = (50, 50, 50)
 
+# Background color
+BG_COLOR = (240, 240, 240)  # Very light gray
+
+# Debug/info text colors
+DEBUG_TEXT_COLOR = (50, 50, 50)
+FPS_COLOR = (0, 150, 255)  # Orange color for better visibility
+
 # =============================================================================
 # UI LAYOUT
 # =============================================================================
-# Button dimensions
-BUTTON_WIDTH = 100
-BUTTON_HEIGHT = 100
-BUTTON_WIDE_WIDTH = 200  # For first row buttons (C and <)
+# Title
+TITLE_TEXT = "Welcome to Sign2Calc!"
+TITLE_X = DISPLAY_WIDTH // 2 - 300
+TITLE_Y = 80
+TITLE_WIDTH = 600
+TITLE_HEIGHT = 60
 
-# Calculator position (right side of screen)
-CALC_OFFSET_X = DISPLAY_WIDTH - 500
-CALC_OFFSET_Y_START = int(DISPLAY_HEIGHT * 0.15)
+# Webcam feed area
+WEBCAM_X = 50
+WEBCAM_Y = 160
+WEBCAM_WIDTH = 1200
+WEBCAM_HEIGHT = 700
 
-# Display area for operation string
-DISPLAY_OFFSET_X = DISPLAY_WIDTH - 500
-DISPLAY_OFFSET_Y = int(DISPLAY_HEIGHT * 0.05)
-DISPLAY_WIDTH_SIZE = 400
-DISPLAY_HEIGHT_SIZE = 120
+# Gesture indicator (top right)
+GESTURE_INDICATOR_X = 1280
+GESTURE_INDICATOR_Y = 160
+GESTURE_INDICATOR_WIDTH = 560
+GESTURE_INDICATOR_HEIGHT = 100
+
+# Calculator buttons area (right side)
+CALC_X = 1280
+CALC_Y = 270
+BUTTON_WIDTH = 130
+BUTTON_HEIGHT = 110
+BUTTON_WIDE_WIDTH = 270  # For first row buttons (C and <)
+BUTTON_SPACING = 10
+
+# Operation display (bottom, spanning width)
+OPERATION_DISPLAY_X = 50
+OPERATION_DISPLAY_Y = 900
+OPERATION_DISPLAY_WIDTH = 1820
+OPERATION_DISPLAY_HEIGHT = 50
+
+# Debug panel (below operation display)
+DEBUG_PANEL_X = 50
+DEBUG_PANEL_Y = 970
+DEBUG_PANEL_WIDTH = 1300
+DEBUG_PANEL_HEIGHT = 80
+
+# Result display (bottom right)
+RESULT_DISPLAY_X = 1370
+RESULT_DISPLAY_Y = 970
+RESULT_DISPLAY_WIDTH = 500
+RESULT_DISPLAY_HEIGHT = 80
+
+# FPS display (top left corner)
+FPS_X = 60
+FPS_Y = 50
+
+# Quit instruction (top right corner)
+QUIT_TEXT_X = 1650
+QUIT_TEXT_Y = 50
 
 # =============================================================================
 # CALCULATOR BUTTON LAYOUT
@@ -70,8 +120,17 @@ FONT = cv2.FONT_HERSHEY_PLAIN
 FONT_SCALE = 3
 FONT_THICKNESS = 3
 
+# Title font
+TITLE_FONT_SCALE = 3
+TITLE_FONT_THICKNESS = 3
+
+# Small text (FPS, quit)
+SMALL_FONT_SCALE = 1.5
+SMALL_FONT_THICKNESS = 1
+
 # Border thickness
-BORDER_THICKNESS = 3
+BORDER_THICKNESS = 2
+BORDER_THICK = 4  # For highlighted elements
 
 # =============================================================================
 # APPLICATION SETTINGS
