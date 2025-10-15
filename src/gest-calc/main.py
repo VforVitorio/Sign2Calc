@@ -4,6 +4,7 @@ Main entry point for the application
 """
 
 import cv2
+import time
 from config import (
     CAMERA_INDEX,
     CAM_WIDTH,
@@ -12,9 +13,15 @@ from config import (
     DISPLAY_HEIGHT,
     WINDOW_NAME,
     QUIT_KEY,
-    BUTTON_VALUES
+    BUTTON_VALUES,
+    CALC_X,
+    CALC_Y,
+    BUTTON_WIDTH,
+    BUTTON_HEIGHT,
+    BUTTON_WIDE_WIDTH,
+    BUTTON_SPACING
 )
-from ui import Button
+from ui import Button, UIRenderer
 from calculator import CalculatorLogic
 from gesture import HandDetector, GestureRecognizer, GestureStabilizer, GestureMapper
 
@@ -27,27 +34,32 @@ def create_buttons():
         list: List of Button instances
     """
     buttonlist = []
-    for y in range(5):
-        for x in range(4):
-            # First row only has 2 buttons (C and <)
-            if y == 0 and x >= 2:
-                break
 
-            xpos = int(DISPLAY_WIDTH - 500 + x * 100)
-            ypos = int(DISPLAY_HEIGHT * 0.15 + y * 100)
+    # Calculate row widths for centering
+    row_0_width = 2 * BUTTON_WIDE_WIDTH + BUTTON_SPACING
+    other_rows_width = 4 * BUTTON_WIDTH + 3 * BUTTON_SPACING
 
-            # First row special case: second button needs to be shifted
-            if y == 0 and x == 1:
-                xpos += 100
+    # Calculate offset to center smaller rows
+    center_offset = (row_0_width - other_rows_width) // 2
 
-            if y == 0:
-                # First row has wider buttons
-                width = 200
-                buttonlist.append(
-                    Button((xpos, ypos), width, 100, BUTTON_VALUES[y][x]))
+    for row in range(5):
+        for col in range(len(BUTTON_VALUES[row])):
+            value = BUTTON_VALUES[row][col]
+
+            # Calculate position
+            if row == 0:
+                # First row: C and < buttons (wider)
+                xpos = CALC_X + col * (BUTTON_WIDE_WIDTH + BUTTON_SPACING)
+                width = BUTTON_WIDE_WIDTH
             else:
-                buttonlist.append(
-                    Button((xpos, ypos), 100, 100, BUTTON_VALUES[y][x]))
+                # Other rows: regular buttons (centered)
+                xpos = CALC_X + center_offset + col * (BUTTON_WIDTH + BUTTON_SPACING)
+                width = BUTTON_WIDTH
+
+            ypos = CALC_Y + row * (BUTTON_HEIGHT + BUTTON_SPACING)
+
+            buttonlist.append(
+                Button((xpos, ypos), width, BUTTON_HEIGHT, value))
 
     return buttonlist
 
@@ -69,6 +81,9 @@ def main():
     gesture_mapper = GestureMapper(calculator)
     buttons = create_buttons()
 
+    # Initialize UI renderer
+    ui_renderer = UIRenderer()
+
     # Initialize gesture detection
     hand_detector = HandDetector(
         max_hands=1, detection_confidence=0.7, tracking_confidence=0.7)
@@ -78,28 +93,27 @@ def main():
     # Configure stabilizer
     gesture_stabilizer.configure(
         hold_threshold_s=0.7,
-        increment_cooldown_s=0.5,
         confirmation_cooldown_s=0.5,
         input_timeout_s=6.0
     )
+
+    # FPS calculation
+    prev_time = time.time()
+    fps = 0
 
     print(f"Sign2Calc started - Press '{QUIT_KEY}' to quit")
 
     # Main loop
     while True:
-        success, img = cap.read()
+        success, frame = cap.read()
 
         if not success:
             print("Failed to read from camera")
             break
 
-        # Resize camera feed to fullscreen resolution
-        img = cv2.resize(img, (DISPLAY_WIDTH, DISPLAY_HEIGHT),
-                         interpolation=cv2.INTER_LINEAR)
-
-        # Detect hands and draw landmarks
-        img = hand_detector.find_hands(img, draw=True)
-        landmark_list = hand_detector.find_position(img)
+        # Detect hands and draw landmarks on webcam frame
+        frame = hand_detector.find_hands(frame, draw=True)
+        landmark_list = hand_detector.find_position(frame)
 
         # Recognize and stabilize gesture
         detected_gesture = None
@@ -116,35 +130,49 @@ def main():
                 result['gesture'])
             print(f"Confirmed: {result['gesture']} - {gesture_desc}")
 
-        # Display debug info
+        # Get stabilizer status for debug display
         status = gesture_stabilizer.get_status()
-        if status['current_gesture']:
-            desc = gesture_recognizer.get_gesture_description(
-                status['current_gesture'])
-            cv2.putText(img, f"Detecting: {status['current_gesture']} - {desc} ({status['progress']})",
-                        (10, 30), cv2.FONT_HERSHEY_PLAIN, 2, (0, 255, 0), 2)
+
+        # Prepare gesture info for display
+        gesture_name = status['current_gesture']
+        gesture_description = None
+        if gesture_name:
+            gesture_description = gesture_recognizer.get_gesture_description(
+                gesture_name)
+
+        # Prepare debug text
+        debug_text = ""
         if status['last_confirmed']:
             desc = gesture_recognizer.get_gesture_description(
                 status['last_confirmed'])
-            cv2.putText(img, f"Last: {status['last_confirmed']} - {desc}",
-                        (10, 60), cv2.FONT_HERSHEY_PLAIN, 2, (0, 255, 255), 2)
+            debug_text = f"GESTURE: \"{status['last_confirmed']}\" -> {desc}"
 
-        # Display area for operation string
-        operation_x = int(DISPLAY_WIDTH - 500)
-        operation_y = int(DISPLAY_HEIGHT * 0.05)
+        # Calculate FPS
+        current_time = time.time()
+        fps = int(1 / (current_time - prev_time)
+                  ) if (current_time - prev_time) > 0 else 0
+        prev_time = current_time
 
-        cv2.rectangle(img, (operation_x, operation_y), (operation_x + 400, operation_y + 120),
-                      (225, 225, 225), cv2.FILLED)
-        cv2.rectangle(img, (operation_x, operation_y), (operation_x + 400, operation_y + 120),
-                      (50, 50, 50), 3)
+        # Get calculator state
+        operation_text = calculator.get_operation() if calculator.get_operation() else "..."
+        result = calculator.get_result()
+        result_text = result if result is not None else "..."
+        highlighted_value = calculator.get_highlighted_value()
 
-        # Draw all calculator buttons
-        for button in buttons:
-            button.draw(img)
-
-        # Display operation string
-        cv2.putText(img, calculator.get_operation(), (operation_x + 10, operation_y + 75),
-                    cv2.FONT_HERSHEY_PLAIN, 3, (50, 50, 50), 3)
+        # Render complete UI frame
+        img = ui_renderer.render_frame(
+            webcam_frame=frame,
+            buttons=buttons,
+            operation_text=operation_text,
+            result_text=result_text,
+            gesture_name=gesture_name,
+            gesture_description=gesture_description,
+            debug_text=debug_text,
+            fps=fps,
+            gesture_count=status['gesture_count'],
+            hold_threshold=gesture_stabilizer.hold_threshold_frames,
+            highlighted_value=highlighted_value
+        )
 
         cv2.imshow(WINDOW_NAME, img)
 

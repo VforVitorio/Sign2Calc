@@ -75,23 +75,23 @@ BUTTON_HEIGHT = 110
 BUTTON_WIDE_WIDTH = 270  # For first row buttons (C and <)
 BUTTON_SPACING = 10
 
-# Operation display (bottom, spanning width)
-OPERATION_DISPLAY_X = 50
-OPERATION_DISPLAY_Y = 900
-OPERATION_DISPLAY_WIDTH = 1820
-OPERATION_DISPLAY_HEIGHT = 50
-
-# Debug panel (below operation display)
-DEBUG_PANEL_X = 50
-DEBUG_PANEL_Y = 970
-DEBUG_PANEL_WIDTH = 1300
-DEBUG_PANEL_HEIGHT = 80
-
-# Result display (bottom right)
-RESULT_DISPLAY_X = 1370
-RESULT_DISPLAY_Y = 970
-RESULT_DISPLAY_WIDTH = 500
+# Result display (bottom, large - main display)
+RESULT_DISPLAY_X = 50
+RESULT_DISPLAY_Y = 900
+RESULT_DISPLAY_WIDTH = 1820
 RESULT_DISPLAY_HEIGHT = 80
+
+# Debug panel (below result display)
+DEBUG_PANEL_X = 50
+DEBUG_PANEL_Y = 990
+DEBUG_PANEL_WIDTH = 1300
+DEBUG_PANEL_HEIGHT = 60
+
+# Operation display (bottom right, smaller)
+OPERATION_DISPLAY_X = 1370
+OPERATION_DISPLAY_Y = 990
+OPERATION_DISPLAY_WIDTH = 500
+OPERATION_DISPLAY_HEIGHT = 60
 
 # FPS display (top left corner)
 FPS_X = 60

@@ -126,3 +126,19 @@ class CalculatorLogic:
             str or None: Result string or None if no result yet
         """
         return self.result
+
+    def get_highlighted_value(self):
+        """
+        Get the value that should be highlighted on the calculator
+
+        Returns:
+            str or None: The value to highlight (current digit or last operation)
+        """
+        if self.digit_mode:
+            # Highlight the current digit being built
+            return str(self.current_digit)
+        elif len(self.operation) > 0:
+            # Highlight the last character (operation or digit)
+            last_char = self.operation[-1]
+            return last_char
+        return None

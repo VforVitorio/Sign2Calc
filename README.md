@@ -27,7 +27,8 @@ Sign2Calc uses **10 distinct hand gestures** optimized for MediaPipe detection:
 ### How It Works
 
 1. **Make a fist** (👊) to start entering a digit
-2. **Raise index finger** (☝️) repeatedly to increment the digit (0→1→2→3...)
+2. **Raise index finger** (☝️) to increment the digit (0→1→2→3...)
+   - Repeat the gesture for each increment
 3. **Show two fingers** (✌️) to confirm the digit
 4. **Select an operation** using the corresponding gesture (✋ for +, 👍 for -, etc.)
 5. **Repeat steps 1-3** to enter the next number
@@ -39,11 +40,11 @@ Sign2Calc uses **10 distinct hand gestures** optimized for MediaPipe detection:
 
 **Example:** To compute `15 + 8`:
 
-- 👊 → ☝️ (1 time) → ✌️ → 👊 → ☝️ (5 times) → ✌️ → ✋ → 👊 → ☝️ (8 times) → ✌️ → 👌
+- 👊 → ☝️ (repeat to reach 1) → ✌️ → 👊 → ☝️ (repeat to reach 5) → ✌️ → ✋ → 👊 → ☝️ (repeat to reach 8) → ✌️ → 👌
 
 **Example with correction:** To compute `23 + 5` (but you entered `24` by mistake):
 
-- 👊 → ☝️ (2 times) → ✌️ → 👊 → ☝️ (4 times) → ✌️ → 🤘 (backspace) → 👊 → ☝️ (3 times) → ✌️ → ✋ → 👊 → ☝️ (5 times) → ✌️ → 👌
+- 👊 → ☝️ (repeat to reach 2) → ✌️ → 👊 → ☝️ (repeat to reach 4) → ✌️ → 🤘 (backspace) → 👊 → ☝️ (repeat to reach 3) → ✌️ → ✋ → 👊 → ☝️ (repeat to reach 5) → ✌️ → 👌
 
 For more details, see [GESTURE_GUIDE.md](docs/GESTURE_GUIDE.md).
 

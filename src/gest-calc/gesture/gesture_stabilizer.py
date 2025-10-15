@@ -23,7 +23,6 @@ class GestureStabilizer:
         # Configuration (in seconds, converted to frames internally)
         # Time to hold gesture before confirming (0.5-1s)
         self.hold_threshold_s = 0.7
-        self.increment_cooldown_s = 0.5  # Cooldown between increments
         self.confirmation_cooldown_s = 0.5  # Cooldown after confirmation gestures
         self.input_timeout_s = 6.0  # Inactivity timeout (5-8s)
 
@@ -37,17 +36,11 @@ class GestureStabilizer:
         self.last_confirmed_gesture = None
         self.inactivity_counter = 0
 
-        # Special handling for INDEX (increment) gesture
-        self.increment_cooldown_counter = 0
-        self.last_increment_time = 0
-
     def _update_frame_thresholds(self):
         """
         Convert time-based thresholds to frame counts
         """
         self.hold_threshold_frames = int(self.hold_threshold_s * self.fps)
-        self.increment_cooldown_frames = int(
-            self.increment_cooldown_s * self.fps)
         self.confirmation_cooldown_frames = int(
             self.confirmation_cooldown_s * self.fps)
         self.input_timeout_frames = int(self.input_timeout_s * self.fps)
@@ -75,23 +68,11 @@ class GestureStabilizer:
             result['timeout'] = True
             return result
 
-        # Handle cooldown period (blocks all gestures)
+        # Handle cooldown period
         if self._is_in_cooldown():
             self._decrement_cooldown()
             self._increment_inactivity()
             return result
-
-        # Special handling for INDEX gesture (increments)
-        if detected_gesture == "INDEX":
-            confirmed = self._handle_increment_gesture()
-            if confirmed:
-                result['gesture'] = "INDEX"
-                self._reset_inactivity()
-            return result
-
-        # Handle increment cooldown separately
-        if self._is_in_increment_cooldown():
-            self._decrement_increment_cooldown()
 
         # Standard gesture handling
         if self._is_new_gesture(detected_gesture):
@@ -131,36 +112,6 @@ class GestureStabilizer:
 
         return False
 
-    def _handle_increment_gesture(self):
-        """
-        Special handling for INDEX gesture (repeatable increments)
-
-        Returns:
-            bool: True if increment should be confirmed
-        """
-        # If in increment cooldown, don't confirm
-        if self._is_in_increment_cooldown():
-            return False
-
-        # First time seeing INDEX or after cooldown
-        if self.current_gesture != "INDEX":
-            self.current_gesture = "INDEX"
-            self.gesture_count = 1
-            return False
-
-        # Increment count
-        self.gesture_count += 1
-
-        # Check if held long enough
-        if self.gesture_count >= self.hold_threshold_frames:
-            # Confirm and start increment cooldown
-            self.last_confirmed_gesture = "INDEX"  # ← AÑADIDO
-            self.increment_cooldown_counter = self.increment_cooldown_frames
-            self.gesture_count = 0  # Reset but keep tracking INDEX
-            return True
-
-        return False
-
     def _is_in_cooldown(self):
         """
         Check if stabilizer is in general cooldown period
@@ -170,26 +121,11 @@ class GestureStabilizer:
         """
         return self.cooldown_counter > 0
 
-    def _is_in_increment_cooldown(self):
-        """
-        Check if stabilizer is in increment-specific cooldown
-
-        Returns:
-            bool: True if in increment cooldown
-        """
-        return self.increment_cooldown_counter > 0
-
     def _decrement_cooldown(self):
         """
         Decrement general cooldown counter
         """
         self.cooldown_counter -= 1
-
-    def _decrement_increment_cooldown(self):
-        """
-        Decrement increment cooldown counter
-        """
-        self.increment_cooldown_counter -= 1
 
     def _increment_inactivity(self):
         """
@@ -285,23 +221,19 @@ class GestureStabilizer:
         self.cooldown_counter = 0
         self.last_confirmed_gesture = None
         self.inactivity_counter = 0
-        self.increment_cooldown_counter = 0
 
-    def configure(self, hold_threshold_s=None, increment_cooldown_s=None,
-                  confirmation_cooldown_s=None, input_timeout_s=None):
+    def configure(self, hold_threshold_s=None, confirmation_cooldown_s=None,
+                  input_timeout_s=None):
         """
         Update configuration parameters
 
         Args:
             hold_threshold_s: Time to hold gesture before confirming (seconds)
-            increment_cooldown_s: Cooldown between increments (seconds)
             confirmation_cooldown_s: Cooldown after confirmation (seconds)
             input_timeout_s: Inactivity timeout (seconds)
         """
         if hold_threshold_s is not None:
             self.hold_threshold_s = hold_threshold_s
-        if increment_cooldown_s is not None:
-            self.increment_cooldown_s = increment_cooldown_s
         if confirmation_cooldown_s is not None:
             self.confirmation_cooldown_s = confirmation_cooldown_s
         if input_timeout_s is not None:
@@ -321,7 +253,6 @@ class GestureStabilizer:
             "gesture_count": self.gesture_count,
             "last_confirmed": self.last_confirmed_gesture,
             "cooldown": self.cooldown_counter,
-            "increment_cooldown": self.increment_cooldown_counter,
             "inactivity": self.inactivity_counter,
             "progress": f"{self.gesture_count}/{self.hold_threshold_frames}" if self.current_gesture else "None",
             "timeout_in": f"{(self.input_timeout_frames - self.inactivity_counter) / self.fps:.1f}s" if self.inactivity_counter > 0 else "N/A"
