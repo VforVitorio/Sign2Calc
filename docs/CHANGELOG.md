@@ -5,6 +5,66 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.1.0] - 2025-10-15 [Released]
+
+### Added
+
+- **Two New Gestures** - Extended gesture system with utility operations:
+  - 🖖 Middle + Ring fingers: Clear (C) - Reset calculator to initial state
+  - 🤘 Index + Pinky fingers: Backspace (<) - Delete last character
+- **Complete UI Renderer Module** (`ui/ui_renderer.py`) - Professional rendering system with:
+  - Modular drawing functions for all UI components
+  - Webcam feed integration with proper positioning
+  - Gesture indicator panel with real-time feedback
+  - Operation and result display panels
+  - Debug panel for development
+  - FPS counter for performance monitoring
+  - Calculator button grid with proper alignment
+- **Visual Feedback System** - Real-time hover effect with green highlight on detected gesture key
+- **Improved Text Sizing** - Adjusted font scales to fit correctly within UI boxes and buttons
+
+### Changed
+
+- **README.md** - Comprehensive update with:
+  - Complete gesture map with emojis and descriptions
+  - Detailed "How It Works" section with practical example
+  - Accurate project structure reflecting actual implementation
+  - Documentation section with links to all guides
+  - Current status and known limitations
+  - Updated requirements (Docker now optional)
+- **Gesture Guide** (`docs/GESTURE_GUIDE.md`) - Updated with new Clear and Backspace gestures
+- **Calculator Logic** (`calculator/calculator_logic.py`) - Added support for Clear and Backspace operations
+- **Gesture Mapper** (`gesture/gesture_mapper.py`) - Integrated new MIDDLE_RING and INDEX_PINKY gesture mappings
+- **Gesture Recognizer** (`gesture/gesture_recognizer.py`) - Added classification for two new finger combinations
+- **Gesture Stabilizer** (`gesture/gesture_stabilizer.py`) - Simplified and optimized confirmation logic
+- **Main Application** (`main.py`) - Major refactor to use new UI renderer module
+- **Config** (`config.py`) - Extensive additions for UI layout constants:
+  - Title, webcam, and display panel coordinates
+  - Gesture indicator and debug panel positions
+  - Calculator button grid layout
+  - Color schemes and styling constants
+- **UI Components** (`ui/components.py`) - Enhanced Button class with improved text centering and sizing
+- **UI Module** (`ui/__init__.py`) - Updated exports to include UIRenderer
+
+### Fixed
+
+- **Button Text Alignment** - Corrected text positioning to properly center within buttons
+- **Font Scaling** - Fixed text overflow issues by adjusting font scales for different UI elements
+- **UI Layout** - Aligned calculator interface with original design specifications
+
+### Technical Improvements
+
+- **Code Organization** - Separated UI rendering logic from main application logic
+- **Maintainability** - Modular UI system makes updates and customizations easier
+- **Visual Consistency** - Unified color scheme and styling across all UI components
+- **Performance** - Optimized rendering pipeline with minimal overhead
+
+### Documentation
+
+- **Enhanced README** - Now serves as comprehensive entry point with complete feature overview
+- **Updated Gesture Guide** - Includes all 10 gestures with clear usage instructions
+- **Accurate Project Structure** - Documentation now matches actual implementation
+
 ## [2.0.0] - 2025-10-14 [Released]
 
 ### Added
