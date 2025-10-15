@@ -23,7 +23,9 @@ class GestureMapper:
             "THUMB_UP": self._handle_thumb_up,
             "PINKY": self._handle_pinky,
             "SHAKA": self._handle_shaka,
-            "OK_SIGN": self._handle_ok_sign
+            "OK_SIGN": self._handle_ok_sign,
+            "MIDDLE_RING": self._handle_middle_ring,
+            "INDEX_PINKY": self._handle_index_pinky
         }
 
     def handle(self, gesture_name):
@@ -73,3 +75,11 @@ class GestureMapper:
     def _handle_ok_sign(self):
         """Calculate result"""
         self.calculator.calculate()
+
+    def _handle_middle_ring(self):
+        """Clear calculator"""
+        self.calculator.clear()
+
+    def _handle_index_pinky(self):
+        """Backspace"""
+        self.calculator.backspace()

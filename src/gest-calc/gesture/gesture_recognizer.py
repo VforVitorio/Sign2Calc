@@ -111,6 +111,14 @@ class GestureRecognizer:
         if fingers == [1, 1, 0, 0, 0]:
             return "OK_SIGN"
 
+        # Middle and Ring fingers (Clear - C)
+        if fingers == [0, 0, 1, 1, 0]:
+            return "MIDDLE_RING"
+
+        # Index and Pinky fingers (Backspace - <)
+        if fingers == [0, 1, 0, 0, 1]:
+            return "INDEX_PINKY"
+
         # No recognized gesture
         return None
 
@@ -132,7 +140,9 @@ class GestureRecognizer:
             "THUMB_UP": "Subtraction (-)",
             "PINKY": "Multiplication (×)",
             "SHAKA": "Division (÷)",
-            "OK_SIGN": "Equals (=)"
+            "OK_SIGN": "Equals (=)",
+            "MIDDLE_RING": "Clear (C)",
+            "INDEX_PINKY": "Backspace (<)"
         }
 
         return descriptions.get(gesture_name, "Unknown gesture")
