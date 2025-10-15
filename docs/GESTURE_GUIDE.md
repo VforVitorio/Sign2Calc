@@ -16,20 +16,31 @@ This section documents the single-hand gesture design used by Sign2Calc. It aims
 
 ## Gesture map
 
+### Digit Entry
 |          Gesture | Action                    |
 | ---------------: | ------------------------- |
 |         👊*Fist* | Start digit (cursor at 0) |
 |        ☝️*Index* | Increment (+1 per repeat) |
 |  ✌️*Two fingers* | Confirm digit             |
+
+### Operations
+|          Gesture | Action                    |
+| ---------------: | ------------------------- |
 |    ✋*Open palm* | Addition (+)              |
 |     👍*Thumb up* | Subtraction (−)           |
 | 🤙*Pinky (only)* | Multiplication (×)        |
 |        🤙*Shaka* | Division (÷)              |
 |      👌*OK sign* | Equals (=)                |
 
-## Interaction flow example
+### Editing Controls
+|            Gesture | Action        |
+| -----------------: | ------------- |
+| 🖖*Middle + Ring*  | Clear (C)     |
+| 🤘*Index + Pinky*  | Backspace (<) |
 
-**Goal:** compute `15 + 8`
+## Interaction flow examples
+
+### Example 1: Basic calculation `15 + 8`
 
 1. `👊` → enter digit mode (digit = 0)
 2. `☝️` ×1 → digit = 1
@@ -42,6 +53,28 @@ This section documents the single-hand gesture design used by Sign2Calc. It aims
 9. `☝️` ×8 → digit = 8
 10. `✌️` → confirm → second operand = `8`
 11. `👌` → compute → UI shows `23`
+
+### Example 2: Using backspace `23 + 5` (after entering `24` by mistake)
+
+1. `👊` → enter digit mode
+2. `☝️` ×2 → digit = 2
+3. `✌️` → confirm → first operand = `2`
+4. `👊` → enter digit mode
+5. `☝️` ×4 → digit = 4
+6. `✌️` → confirm → operand = `24`
+7. `🤘` → backspace → operand = `2`
+8. `👊` → enter digit mode
+9. `☝️` ×3 → digit = 3
+10. `✌️` → confirm → operand = `23`
+11. `✋` → select addition (+)
+12. `👊` → enter digit mode
+13. `☝️` ×5 → digit = 5
+14. `✌️` → confirm → second operand = `5`
+15. `👌` → compute → UI shows `28`
+
+### Example 3: Using clear
+
+1. After any operation, use `🖖` (Middle + Ring) to clear everything and start fresh
 
 ## Detection heuristics
 
@@ -67,6 +100,15 @@ This section documents the single-hand gesture design used by Sign2Calc. It aims
 
 This gesture system prioritizes reliability and accessibility by using a small set of highly distinctive hand shapes that are easy to detect and hard to confuse.
 
-**MediaPipe Detection Optimization:** Through testing, these specific gestures (fist, index, two fingers, palm, thumb up, pinky only, shaka, and middle finger) were found to be the most reliably detected by MediaPipe's hand landmark detection system. They provide clear finger position patterns that minimize false positives and confusion between gestures.
+**MediaPipe Detection Optimization:** Through testing, these specific gestures were found to be the most reliably detected by MediaPipe's hand landmark detection system:
+
+- **Digit entry gestures:** Fist, Index, Two Fingers
+- **Operation gestures:** Palm, Thumb Up, Pinky Only, Shaka, OK Sign
+- **Editing gestures:** Middle + Ring, Index + Pinky
+
+These gestures provide clear finger position patterns that minimize false positives and confusion between gestures. The editing gestures (Middle + Ring for Clear, Index + Pinky for Backspace) were specifically chosen to be:
+- **Easy to perform** - Natural hand positions that don't require difficult finger isolation
+- **Highly distinctive** - Cannot be confused with operation gestures or digit entry gestures
+- **Non-offensive** - Appropriate for all contexts and cultures
 
 By relying on a single hand, we avoid occlusion issues while keeping interactions simple and natural. The incremental entry pattern scales to any number without adding complexity, and the straightforward gestures work well for users with varying levels of hand mobility, making the calculator genuinely more inclusive.
