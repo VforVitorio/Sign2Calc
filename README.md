@@ -6,16 +6,23 @@ Gesture-based calculator using webcam and hand detection. Perform calculations n
 
 ### Gesture-Controlled Operations
 
-Sign2Calc uses **8 distinct hand gestures** optimized for MediaPipe detection:
+Sign2Calc uses **10 distinct hand gestures** optimized for MediaPipe detection:
 
+#### Digit Entry
 - 👊 **Fist** - Start digit entry mode (cursor at 0)
 - ☝️ **Index** - Increment digit (+1 per repeat)
 - ✌️ **Two Fingers** - Confirm digit
+
+#### Operations
 - ✋ **Open Palm** - Addition (+)
 - 👍 **Thumb Up** - Subtraction (−)
 - 🤙 **Pinky Only** - Multiplication (×)
 - 🤙 **Shaka** - Division (÷)
 - 👌 **OK Sign** - Equals/Calculate (=)
+
+#### Editing
+- 🖖 **Middle + Ring** - Clear (C)
+- 🤘 **Index + Pinky** - Backspace (<)
 
 ### How It Works
 
@@ -26,9 +33,17 @@ Sign2Calc uses **8 distinct hand gestures** optimized for MediaPipe detection:
 5. **Repeat steps 1-3** to enter the next number
 6. **Make OK sign** (👌) to calculate the result
 
+**Additional Controls:**
+- Use **Middle + Ring** (🖖) to clear everything
+- Use **Index + Pinky** (🤘) to delete the last character
+
 **Example:** To compute `15 + 8`:
 
 - 👊 → ☝️ (1 time) → ✌️ → 👊 → ☝️ (5 times) → ✌️ → ✋ → 👊 → ☝️ (8 times) → ✌️ → 👌
+
+**Example with correction:** To compute `23 + 5` (but you entered `24` by mistake):
+
+- 👊 → ☝️ (2 times) → ✌️ → 👊 → ☝️ (4 times) → ✌️ → 🤘 (backspace) → 👊 → ☝️ (3 times) → ✌️ → ✋ → 👊 → ☝️ (5 times) → ✌️ → 👌
 
 For more details, see [GESTURE_GUIDE.md](docs/GESTURE_GUIDE.md).
 
@@ -119,11 +134,13 @@ make shell
 
 **Version 2.0.0** - First functional release with complete gesture recognition system.
 
-### Known Limitations
+### Recent Improvements
 
-- UI design requires refinement to match planned specifications
-- Gesture stabilizer needs fine-tuning for optimal cooldown timers
-- Gesture retention issue: maintaining a gesture after detection may trigger duplicate actions
+- ✅ UI redesigned with larger buttons and better alignment
+- ✅ Separate OPERATION and RESULT displays for clearer feedback
+- ✅ Visual progress bar showing gesture hold duration
+- ✅ Added Clear (C) and Backspace (<) gesture controls
+- ✅ Enhanced gesture recognition with 10 distinct gestures
 
 See [CHANGELOG.md](docs/CHANGELOG.md) for detailed release notes.
 
