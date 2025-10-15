@@ -186,18 +186,18 @@ class UIRenderer:
             cv2.putText(
                 img,
                 text,
-                (GESTURE_INDICATOR_X + 10, GESTURE_INDICATOR_Y + 30),
+                (GESTURE_INDICATOR_X + 10, GESTURE_INDICATOR_Y + 35),
                 FONT,
-                FONT_SCALE,
+                SMALL_FONT_SCALE,
                 DISPLAY_TEXT_COLOR,
-                FONT_THICKNESS
+                SMALL_FONT_THICKNESS
             )
 
             # Draw progress bar
             progress_bar_x = GESTURE_INDICATOR_X + 10
-            progress_bar_y = GESTURE_INDICATOR_Y + 45
+            progress_bar_y = GESTURE_INDICATOR_Y + 55
             progress_bar_width = GESTURE_INDICATOR_WIDTH - 20
-            progress_bar_height = 20
+            progress_bar_height = 30
 
             # Draw progress bar background
             cv2.rectangle(
@@ -224,15 +224,21 @@ class UIRenderer:
                         cv2.FILLED
                     )
 
-    def draw_buttons(self, img, buttons):
+    def draw_buttons(self, img, buttons, highlighted_value=None):
         """
         Draw all calculator buttons
 
         Args:
             img: Image to draw on
             buttons: List of Button objects
+            highlighted_value: Value to highlight (or None)
         """
         for button in buttons:
+            # Set highlight if this button's value matches
+            if highlighted_value and button.get_value() == highlighted_value:
+                button.set_highlight(True)
+            else:
+                button.set_highlight(False)
             button.draw(img)
 
     def draw_operation_display(self, img, operation_text):
@@ -267,11 +273,11 @@ class UIRenderer:
         cv2.putText(
             img,
             f"OPERATION: {operation_text}",
-            (OPERATION_DISPLAY_X + 10, OPERATION_DISPLAY_Y + 35),
+            (OPERATION_DISPLAY_X + 15, OPERATION_DISPLAY_Y + 38),
             FONT,
-            FONT_SCALE,
+            SMALL_FONT_SCALE,
             DISPLAY_TEXT_COLOR,
-            FONT_THICKNESS
+            SMALL_FONT_THICKNESS
         )
 
     def draw_debug_panel(self, img, debug_text):
@@ -345,7 +351,7 @@ class UIRenderer:
         cv2.putText(
             img,
             f"RESULT: {result_text}",
-            (RESULT_DISPLAY_X + 10, RESULT_DISPLAY_Y + 35),
+            (RESULT_DISPLAY_X + 15, RESULT_DISPLAY_Y + 55),
             FONT,
             FONT_SCALE,
             DISPLAY_TEXT_COLOR,
@@ -389,7 +395,7 @@ class UIRenderer:
 
     def render_frame(self, webcam_frame, buttons, operation_text, result_text,
                      gesture_name, gesture_description, debug_text, fps,
-                     gesture_count=0, hold_threshold=1):
+                     gesture_count=0, hold_threshold=1, highlighted_value=None):
         """
         Render complete frame with all UI elements
 
@@ -404,6 +410,7 @@ class UIRenderer:
             fps: Current FPS
             gesture_count: Current frame count holding gesture
             hold_threshold: Frames needed to confirm gesture
+            highlighted_value: Value to highlight on calculator (or None)
 
         Returns:
             numpy.ndarray: Complete rendered frame
@@ -416,7 +423,7 @@ class UIRenderer:
         self.draw_webcam_area(img, webcam_frame)
         self.draw_gesture_indicator(img, gesture_name, gesture_description,
                                     gesture_count, hold_threshold)
-        self.draw_buttons(img, buttons)
+        self.draw_buttons(img, buttons, highlighted_value)
         self.draw_operation_display(img, operation_text)
         self.draw_debug_panel(img, debug_text)
         self.draw_result_display(img, result_text)
