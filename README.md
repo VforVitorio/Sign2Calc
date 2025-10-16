@@ -1,6 +1,12 @@
+<div align="center">
+
 # Sign2Calc
 
 Gesture-based calculator using webcam and hand detection. Perform calculations naturally with hand gestures through an innovative incremental digit entry system.
+
+[![Ask DeepWiki](https://deepwiki.com/badge.svg)](https://deepwiki.com/VforVitorio/Sign2Calc)
+
+</div>
 
 ## Features
 
@@ -29,28 +35,7 @@ Sign2Calc uses **10 distinct hand gestures** optimized for MediaPipe detection:
 
 ### How It Works
 
-1. **Make a fist** (👊) to start entering a digit
-2. **Raise index finger** (☝️) to increment the digit (0→1→2→3...)
-   - Repeat the gesture for each increment
-3. **Show two fingers** (✌️) to confirm the digit
-4. **Select an operation** using the corresponding gesture (✋ for +, 👍 for -, etc.)
-5. **Repeat steps 1-3** to enter the next number
-6. **Make OK sign** (👌) to calculate the result
-
-**Additional Controls:**
-
-- Use **Middle + Ring** (🖖) to clear everything
-- Use **Index + Pinky** (🤘) to delete the last character
-
-**Example:** To compute `15 + 8`:
-
-- 👊 → ☝️ (repeat to reach 1) → ✌️ → 👊 → ☝️ (repeat to reach 5) → ✌️ → ✋ → 👊 → ☝️ (repeat to reach 8) → ✌️ → 👌
-
-**Example with correction:** To compute `23 + 5` (but you entered `24` by mistake):
-
-- 👊 → ☝️ (repeat to reach 2) → ✌️ → 👊 → ☝️ (repeat to reach 4) → ✌️ → 🤘 (backspace) → 👊 → ☝️ (repeat to reach 3) → ✌️ → ✋ → 👊 → ☝️ (repeat to reach 5) → ✌️ → 👌
-
-For more details, see [GESTURE_GUIDE.md](docs/GESTURE_GUIDE.md).
+For complete usage instructions and examples, see [GESTURE_GUIDE.md](docs/GESTURE_GUIDE.md).
 
 ## Project Structure
 
@@ -58,36 +43,25 @@ For more details, see [GESTURE_GUIDE.md](docs/GESTURE_GUIDE.md).
 Sign2Calc/
 ├── src/
 │   ├── gest-calc/
-│   │   ├── main.py                    # Entry point
-│   │   ├── config.py                  # Constants (resolution, colors, etc)
-│   │   │
+│   │   ├── main.py                    # Application entry point
+│   │   ├── config.py                  # Configuration constants
 │   │   ├── ui/
-│   │   │   └── components.py          # Button class for UI elements
-│   │   │
+│   │   │   ├── components.py          # UI components (Button class)
+│   │   │   └── ui_renderer.py         # UI rendering system
 │   │   ├── gesture/
-│   │   │   ├── hand_detector.py       # MediaPipe hand detection
-│   │   │   ├── gesture_recognizer.py  # Classify gestures from landmarks
-│   │   │   ├── gesture_mapper.py      # Map gestures → calculator actions
-│   │   │   └── gesture_stabilizer.py  # Temporal smoothing & false positive filtering
-│   │   │
-│   │   ├── calculator/
-│   │   │   └── calculator_logic.py    # Calculator state & operations
-│   │   │
-│   │   └── utils/                     # (Reserved for future utilities)
-│   │
+│   │   │   ├── hand_detector.py       # Hand tracking (MediaPipe)
+│   │   │   ├── gesture_recognizer.py  # Gesture classification
+│   │   │   ├── gesture_mapper.py      # Gesture → action mapping
+│   │   │   └── gesture_stabilizer.py  # Temporal filtering
+│   │   └── calculator/
+│   │       └── calculator_logic.py    # Calculator operations
 │   └── test/
-│       ├── camera_resolution_test.py  # Camera capability testing
-│       └── webcam_test.py             # Basic webcam functionality test
-│
-├── docs/
-│   ├── CHANGELOG.md                   # Version history
-│   ├── GESTURE_GUIDE.md               # Complete gesture documentation
-│   └── ROADMAP.md                     # Architecture & future plans
-│
-├── Dockerfile
-├── Makefile
-├── requirements.txt
-└── LICENSE
+│       ├── camera_resolution_test.py  # Camera testing
+│       └── webcam_test.py             # Webcam testing
+├── docs/                              # Documentation
+├── Dockerfile                         # Container configuration
+├── Makefile                           # Build & run commands
+└── requirements.txt                   # Python dependencies
 ```
 
 ## Quick Start
@@ -134,12 +108,6 @@ make shell
 - **[GESTURE_GUIDE.md](docs/GESTURE_GUIDE.md)** - Complete gesture system documentation with design principles and usage examples
 - **[ROADMAP.md](docs/ROADMAP.md)** - Architecture details and future development plans
 - **[CHANGELOG.md](docs/CHANGELOG.md)** - Version history and release notes
-
-## Current Status
-
-**Version 2.0.0** - First functional release with complete gesture recognition system.
-
-[![Ask DeepWiki](https://deepwiki.com/badge.svg)](https://deepwiki.com/VforVitorio/Sign2Calc)
 
 ### Recent Improvements
 
