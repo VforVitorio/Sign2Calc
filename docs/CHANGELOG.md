@@ -5,6 +5,47 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.2.0] - 2025-10-16 [Released] - FINAL VERSION
+
+> **⚠️ This is the final release of Sign2Calc for the UIE course project.**  
+> No further updates are planned unless critical bugs are discovered.
+
+### Added
+
+- **DeepWiki Badge** - Added badge to README.md linking to project documentation wiki
+- **Project Status Badge** - Visual indicator that project is in final release state
+
+### Changed
+
+- **README.md** - Reorganized gesture list with clearer categorization:
+  - Separated into "Digit Entry", "Operations", and "Editing" sections
+  - Improved readability with better formatting
+  - Added DeepWiki documentation badge
+
+### Fixed
+
+- **UI Text Quality** - Major improvement in text rendering quality:
+  - Switched from `FONT_HERSHEY_PLAIN` to `FONT_HERSHEY_SIMPLEX` for better readability
+  - Increased font thickness from 1 to 2 for crisper text
+  - Applied consistent font improvements across all UI text elements
+- **Text Vertical Alignment** - Fixed vertical centering in display panels:
+  - Corrected OPERATION display text positioning (adjusted Y coordinate by +10px)
+  - Corrected RESULT display text positioning (adjusted Y coordinate by +10px)
+  - Text now properly centered within their respective display boxes
+- **Config Font Settings** - Updated default font configuration to use higher quality font
+
+### Removed
+
+- **Empty Utils Directory** - Removed unused `utils/.gitkeep` placeholder
+- **Deprecated Placeholders** - Cleaned up project structure
+
+### Polish & Finalization
+
+- All core features fully implemented and tested
+- UI refined to match design specifications
+- Documentation complete and up-to-date
+- Project ready for final submission
+
 ## [2.1.0] - 2025-10-15 [Released]
 
 ### Added
