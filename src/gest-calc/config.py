@@ -115,18 +115,18 @@ BUTTON_VALUES = [
 # =============================================================================
 # TEXT RENDERING
 # =============================================================================
-# Font configuration
-FONT = cv2.FONT_HERSHEY_PLAIN
-FONT_SCALE = 3
-FONT_THICKNESS = 3
+# Font configuration - Using SIMPLEX for better quality
+FONT = cv2.FONT_HERSHEY_SIMPLEX
+FONT_SCALE = 1.2
+FONT_THICKNESS = 2
 
 # Title font
-TITLE_FONT_SCALE = 3
+TITLE_FONT_SCALE = 1.5
 TITLE_FONT_THICKNESS = 3
 
-# Small text (FPS, quit)
-SMALL_FONT_SCALE = 1.5
-SMALL_FONT_THICKNESS = 1
+# Small text (FPS, quit, operation, gesture) - Increased for better readability
+SMALL_FONT_SCALE = 0.9
+SMALL_FONT_THICKNESS = 2
 
 # Border thickness
 BORDER_THICKNESS = 2

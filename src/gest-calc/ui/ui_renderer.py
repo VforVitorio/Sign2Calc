@@ -269,11 +269,15 @@ class UIRenderer:
             BORDER_THICKNESS
         )
 
-        # Draw label
+        # Draw label - Calculate centered Y position
+        text = f"OPERATION: {operation_text}"
+        text_size = cv2.getTextSize(text, FONT, SMALL_FONT_SCALE, SMALL_FONT_THICKNESS)[0]
+        text_y = OPERATION_DISPLAY_Y + (OPERATION_DISPLAY_HEIGHT + text_size[1]) // 2
+
         cv2.putText(
             img,
-            f"OPERATION: {operation_text}",
-            (OPERATION_DISPLAY_X + 15, OPERATION_DISPLAY_Y + 38),
+            text,
+            (OPERATION_DISPLAY_X + 15, text_y),
             FONT,
             SMALL_FONT_SCALE,
             DISPLAY_TEXT_COLOR,
@@ -347,11 +351,15 @@ class UIRenderer:
             BORDER_THICKNESS
         )
 
-        # Draw result text
+        # Draw result text - Calculate centered Y position
+        text = f"RESULT: {result_text}"
+        text_size = cv2.getTextSize(text, FONT, FONT_SCALE, FONT_THICKNESS)[0]
+        text_y = RESULT_DISPLAY_Y + (RESULT_DISPLAY_HEIGHT + text_size[1]) // 2
+
         cv2.putText(
             img,
-            f"RESULT: {result_text}",
-            (RESULT_DISPLAY_X + 15, RESULT_DISPLAY_Y + 55),
+            text,
+            (RESULT_DISPLAY_X + 15, text_y),
             FONT,
             FONT_SCALE,
             DISPLAY_TEXT_COLOR,
