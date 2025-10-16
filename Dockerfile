@@ -22,9 +22,11 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     && rm -rf /var/lib/apt/lists/*
 
 RUN python -m venv /opt/.venv \
-    && /opt/.venv/bin/pip install --upgrade pip \
-    && /opt/.venv/bin/pip install --no-cache-dir opencv-python \
-    && /opt/.venv/bin/pip install --no-cache-dir mediapipe
+    && /opt/.venv/bin/pip install --upgrade pip
 
+WORKDIR /opt/project
 
-WORKDIR /opt
+COPY requirements.txt .
+RUN /opt/.venv/bin/pip install --no-cache-dir -r requirements.txt
+
+COPY . .
