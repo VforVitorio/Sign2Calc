@@ -9,11 +9,13 @@ Gesture-based calculator using webcam and hand detection. Perform calculations n
 Sign2Calc uses **10 distinct hand gestures** optimized for MediaPipe detection:
 
 #### Digit Entry
+
 - 👊 **Fist** - Start digit entry mode (cursor at 0)
 - ☝️ **Index** - Increment digit (+1 per repeat)
 - ✌️ **Two Fingers** - Confirm digit
 
 #### Operations
+
 - ✋ **Open Palm** - Addition (+)
 - 👍 **Thumb Up** - Subtraction (−)
 - 🤙 **Pinky Only** - Multiplication (×)
@@ -21,6 +23,7 @@ Sign2Calc uses **10 distinct hand gestures** optimized for MediaPipe detection:
 - 👌 **OK Sign** - Equals/Calculate (=)
 
 #### Editing
+
 - 🖖 **Middle + Ring** - Clear (C)
 - 🤘 **Index + Pinky** - Backspace (<)
 
@@ -35,6 +38,7 @@ Sign2Calc uses **10 distinct hand gestures** optimized for MediaPipe detection:
 6. **Make OK sign** (👌) to calculate the result
 
 **Additional Controls:**
+
 - Use **Middle + Ring** (🖖) to clear everything
 - Use **Index + Pinky** (🤘) to delete the last character
 
@@ -134,6 +138,8 @@ make shell
 ## Current Status
 
 **Version 2.0.0** - First functional release with complete gesture recognition system.
+
+[![Ask DeepWiki](https://deepwiki.com/badge.svg)](https://deepwiki.com/VforVitorio/Sign2Calc)
 
 ### Recent Improvements
 
