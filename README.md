@@ -1,12 +1,12 @@
-<div align="center">
-
 # Sign2Calc
 
 Gesture-based calculator using webcam and hand detection. Perform calculations naturally with hand gestures through an innovative incremental digit entry system.
 
-[![Ask DeepWiki](https://deepwiki.com/badge.svg)](https://deepwiki.com/VforVitorio/Sign2Calc)
-
-</div>
+<p align="center">
+  <a href="https://deepwiki.com/VforVitorio/Sign2Calc">
+    <img src="https://deepwiki.com/badge.svg" alt="Ask DeepWiki">
+  </a>
+</p>
 
 ## Features
 
