@@ -21,6 +21,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - Separated into "Digit Entry", "Operations", and "Editing" sections
   - Improved readability with better formatting
   - Added DeepWiki documentation badge
+- **Dockerfile** - Improved build process and dependency management:
+  - Changed working directory from `/opt` to `/opt/project` for better organization
+  - Now uses `requirements.txt` for dependency installation instead of hardcoded packages
+  - Simplified pip installation process
+  - Better layer caching for faster rebuilds
+- **Makefile** - Updated Docker container configurations:
+  - Fixed Python version path from 3.11 to 3.9 in `QT_QPA_PLATFORM_PLUGIN_PATH` (all targets)
+  - Corrected `camtest` target path: now points to `/opt/project/src/test/webcam_test.py`
+  - Ensures consistency across `camtest`, `run`, and `shell` targets
 
 ### Fixed
 
